@@ -24,11 +24,8 @@ explainer = shap.Explainer(model, masker=masker)
 image_path = "missdor/Base11/20051019_38557_0100_PP.tif"
 image = img.imread(image_path)
 
-# Display the image and save it to a file
-plt.imshow(image)
-plt.axis('off')  # Hide axes for a cleaner display
-plt.savefig('my_images/displayed_image.png', bbox_inches='tight', pad_inches=0)
+# Convert the image to the appropriate format for cv2
+image_cv2 = (image * 255).astype(np.uint8)
 
-# Get SHAP values
-#image_data = np.random.randn(1, 3, 224, 224)  # Replace with actual image data
-#shap_values = explainer(image_data)
+# Save the image using cv2
+cv2.imwrite('my_images/displayed_image_cv2.png', image_cv2)
