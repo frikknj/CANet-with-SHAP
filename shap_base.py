@@ -23,7 +23,7 @@ image_resized = np.expand_dims(image_resized, axis=0)
 
 model = ClsNet(opt)
 
-def preprocess_images(directory_path,amount_of_images):
+def preprocess_images(directory_path, amount_of_images):
     images = []
     for filename in os.listdir(directory_path):
         if filename.endswith(".tif"):
@@ -33,19 +33,6 @@ def preprocess_images(directory_path,amount_of_images):
             image_resized = np.expand_dims(image_resized, axis=0)
             images.append(image_resized)
     return images[0:amount_of_images]
-
-images = preprocess_images(directory_path)
-
-def generate_shap_values_deep_explainer(model, images, background_data):
-    shap_values_list = []
-    explainer = shap.DeepExplainer(model, background_data)
-    for image in images:
-        preprocessed_img = torch.from_numpy(image)
-        shap_values = explainer(preprocessed_img)
-        shap_values_list.append(shap_values)
-    return shap_values_list
-
-#shap_values_list_deep_explainer = generate_shap_values_deep_explainer(model, images, images[0])
 
 def save_to_json_file(values): #Saving shap values to json file.
     filepath = "my_images/shap_values.json"
@@ -59,7 +46,7 @@ def save_to_json_file(values): #Saving shap values to json file.
     with open(filepath, "w") as json_file:
         json.dump(shap_values_data, json_file, indent=4)
 
-def plots(shap_values_list, background_images):
+def plots(shap_values_list, background_images, image_saving_path):
     for i, (shap_values, background_image) in enumerate(zip(shap_values_list, background_images)):
         # Convert the SHAP values to a format suitable for plotting
         shap_values_np = [sv.values for sv in shap_values]
@@ -69,9 +56,10 @@ def plots(shap_values_list, background_images):
         shap.image_plot(shap_values_np, background_image)
 
         # Save the plot to a file
-        plt.savefig(f'my_images/shap_plot_{i}.png', bbox_inches='tight', pad_inches=0)
+        plt.savefig(f'{image_saving_path}/shap_plot_{i}.png', bbox_inches='tight', pad_inches=0)
         plt.close()
 
+    # Save background image
     background_image_to_save = (background_image * 255).astype(np.uint8)
     background_image_to_save = np.squeeze(background_image_to_save)
-    cv2.imwrite(f'my_images/image_resized.png', background_image_to_save)
+    cv2.imwrite(f'{image_saving_path}/background_image.png', background_image_to_save)
