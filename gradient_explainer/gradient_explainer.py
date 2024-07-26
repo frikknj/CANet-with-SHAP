@@ -84,8 +84,3 @@ def save_to_json_file(all_shap_values):
 #save_to_json_file(shap_values)
 
 joblib.dump(shap_values, 'gradient_explainer/shap_values.joblib')
-shap_values = joblib.load('gradient_explainer/shap_values.joblib')
-
-shap.image_plot(shap_values, to_explain)#, indexes)
-plt.savefig(f'gradient_explainer/images/image_plot_2.png', bbox_inches='tight', pad_inches=0)
-plt.close()
