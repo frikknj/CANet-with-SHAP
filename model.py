@@ -21,6 +21,11 @@ class ClsNet(nn.Module):
         self.criterionCls = torch.nn.CrossEntropyLoss()
 
     def forward(self, img1):
+        """print(type(img1))
+        if isinstance(img1, np.ndarray): #Lagt til for å endre hvis det er np.array i stedet for pytorch tensor object
+            img1 = torch.from_numpy(img1)
+        img1 = img1.float()
+        img1 = img1.permute(0, 3, 1, 2)"""
         out = self.net3(img1)
         return out
 

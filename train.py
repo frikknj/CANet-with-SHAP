@@ -24,7 +24,7 @@ print('The number of training images = %d' % train_dataset_size)
 opt.isTrain = False
 val_dataset = create_dataset(opt)
 val_dataset_size = len(val_dataset)
-print('The number of training images = %d' % val_dataset_size)
+print('The number of validation images = %d' % val_dataset_size)
 opt.isTrain = True
 
 cuda = torch.cuda.is_available()
