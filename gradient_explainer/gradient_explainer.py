@@ -14,6 +14,7 @@ import os
 import shap
 import matplotlib.pyplot as plt
 import json
+import joblib
 
 model = ClsNet(opt)
 model_dict = model.state_dict()
@@ -31,10 +32,7 @@ def normalize(image):
     if image.max() > 1:
         image = image.astype(np.float32) / 255
     image = (image - mean) / std
-    print(torch.tensor(image).float().shape)
     x = torch.tensor(image.swapaxes(-1, 1).swapaxes(2, 3)).float()
-    print(x.shape)
-    print(torch.Tensor(image).permute(0, 3, 1, 2).float().shape)
     return torch.tensor(image.swapaxes(-1, 1).swapaxes(2, 3)).float()
 
 def scale(image):
@@ -68,7 +66,7 @@ to_explain = X[[38,39,40]]
 e = shap.GradientExplainer(model, normalize(X))
 shap_values,indexes = e.shap_values(normalize(to_explain), ranked_outputs=2)
 
-shap_values = [np.swapaxes(np.swapaxes(s, 2, 3), 1, -1) for s in shap_values] #torch.tensor(image.swapaxes(-1, 1).swapaxes(2, 3)).float()
+shap_values = [np.swapaxes(np.swapaxes(s, 2, 3), 1, -1) for s in shap_values]
 shap_values = [s.transpose(2,3,1,0) for s in shap_values]
 shap_values = list(map(np.array, zip(*shap_values)))
 
@@ -83,7 +81,10 @@ def save_to_json_file(all_shap_values):
     with open('gradient_explainer/shap_values.json', "w") as json_file:
         json.dump(listed_dictionaries, json_file, indent=4)
 
-save_to_json_file(shap_values)
+#save_to_json_file(shap_values)
+
+joblib.dump(shap_values, 'gradient_explainer/shap_values.joblib')
+shap_values = joblib.load('gradient_explainer/shap_values.joblib')
 
 shap.image_plot(shap_values, to_explain)#, indexes)
 plt.savefig(f'gradient_explainer/images/image_plot_2.png', bbox_inches='tight', pad_inches=0)
