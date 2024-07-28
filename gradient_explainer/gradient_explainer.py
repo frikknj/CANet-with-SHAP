@@ -63,7 +63,7 @@ directory_path = "missdor/Base11"
 X = make_list_images(directory_path)
 X = np.array(scale_all(X))
 
-to_explain = X[[38,39,40]]
+to_explain = X[[19, 31, 41]]
 
 e = shap.GradientExplainer(model, normalize(X))
 shap_values,indexes = e.shap_values(normalize(to_explain), ranked_outputs=2)

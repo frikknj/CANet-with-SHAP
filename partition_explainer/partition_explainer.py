@@ -110,7 +110,7 @@ masker_blur = shap.maskers.Image("blur(5,5)", Xtr[0].shape)
 class_names = ['Grade_0','Grade_1']
 explainer = shap.Explainer(predict, masker_blur, output_names=class_names)
 
-shap_values = explainer(Xtr[0:3], max_evals=10000)
+shap_values = explainer(Xtr[[[19, 31, 41]]], max_evals=10000)
 
 shap_values.data = inv_transform(shap_values.data).cpu().numpy()
 shap_values.values = [val for val in np.moveaxis(shap_values.values, -1, 0)]

@@ -37,7 +37,7 @@ directory_path = "missdor/Base11"
 X = make_list_images(directory_path)
 X = np.array(scale_all(X))
 
-to_explain = X[[38,39,40]]
+to_explain = X[[19, 31, 41]]
 
 shap_values = joblib.load('gradient_explainer/shap_values.joblib')
 
