@@ -21,7 +21,7 @@ def acu_curve(y, prob):
     plt.title('AUC')
     plt.legend(loc="lower right")
     plt.show()
-    plt.savefig("filename.png")
+    plt.savefig("AUC.png")
 
 from config import Opt
 
@@ -58,6 +58,7 @@ model.eval()
 all_target = []
 all_pre_list = []
 all_prob_list = []
+all_ids = []
 
 with torch.no_grad():
     for i, data_ in enumerate(val_dataset):
@@ -68,6 +69,7 @@ with torch.no_grad():
         img1, bag_label = Variable(img1), Variable(bag_label)
         allimg_pre, allimg_prob = model.calculate_acc(img1)
         all_target.append(bag_label.cpu().data.numpy())
+        all_ids.append(data_['id_'][0])
         all_pre_list.append(allimg_pre)
         all_prob_list.append(allimg_prob)
 
@@ -78,3 +80,25 @@ recall = recall_score(all_target, all_pre_list)
 f1score = f1_score(all_target, all_pre_list)
 print('acc: {:.4f}, auc: {:.4f}, prc: {:.4f}, recall: {:.4f}, f1: {:.4f}'.format(acc, AUC, precision, recall, f1score))
 acu_curve(all_target, all_prob_list)
+
+with open("test_results.txt", "w") as file:
+    correct_predictions = 0
+    file.write("Image ID, Prediction, Probability, Target\n")
+    for img_id, pred, prob, target in zip(all_ids, all_pre_list, all_prob_list, all_target):
+        file.write(f"{img_id}, {pred}, {prob}, {target}\n")
+        if pred == target:
+            correct_predictions += 1
+    file.write(f"Correct predictions: {correct_predictions}/{len(all_ids)}")
+
+with open("test_filtered_results.txt", "w") as file:
+    correct_predictions = 0
+    number_of_predictions = 0
+    file.write("Image ID, Prediction, Probability\n")
+    for img_id, pred, prob, target in zip(all_ids, all_pre_list, all_prob_list, all_target):
+        if img_id.startswith("20051020"):
+            number_of_predictions += 1
+            file.write(f"{img_id}, {pred}, {prob}, {target}\n")
+            if pred == target:
+               correct_predictions += 1
+    file.write(f"Correct predictions: {correct_predictions}/{number_of_predictions}")
+    
