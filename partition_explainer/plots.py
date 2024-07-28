@@ -1,7 +1,7 @@
 # Run script with:
 #python3 -m partition_explainer.plots
 # Alternatively:
-#python3 -m partition_explainer.partition_explainer4; python3 -m partition_explainer.plots
+#python3 -m partition_explainer.partition_explainer; python3 -m partition_explainer.plots
 
 import shap
 import matplotlib.pyplot as plt

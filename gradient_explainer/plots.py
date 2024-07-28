@@ -28,7 +28,8 @@ def make_list_images(directory_path):
         if filename.endswith(".tif"):
             image_path = os.path.join(directory_path, filename)
             image = cv2.imread(image_path)
-            images_list.append(image)
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            images_list.append(image_rgb)
     return images_list
 
 directory_path = "missdor/Base11"
@@ -41,5 +42,5 @@ to_explain = X[[38,39,40]]
 shap_values = joblib.load('gradient_explainer/shap_values.joblib')
 
 shap.image_plot(shap_values, to_explain)
-plt.savefig(f'gradient_explainer/images/image_plot_2.png', bbox_inches='tight', pad_inches=0)
+plt.savefig(f'gradient_explainer/images/image_plot.png', bbox_inches='tight', pad_inches=0)
 plt.close()
