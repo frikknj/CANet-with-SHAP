@@ -47,7 +47,8 @@ def make_list_images(directory_path):
         if filename.endswith(".tif"):
             image_path = os.path.join(directory_path, filename)
             image = cv2.imread(image_path)
-            images_list.append(image)
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            images_list.append(image_rgb)
     return images_list
 
 def scale_all(images):
