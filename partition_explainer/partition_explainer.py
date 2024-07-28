@@ -1,7 +1,7 @@
 # Run script with:
 #python3 -m partition_explainer.partition_explainer4
 # Alternatively:
-#python3 -m partition_explainer.partition_explainer4; python3 -m partition_explainer.plots
+#python3 -m partition_explainer.partition_explainer; python3 -m partition_explainer.plots
 
 from config import Opt
 
@@ -41,19 +41,25 @@ def scale_all(images):
         images_scaled.append(image_scaled)
     return images_scaled
 
-def make_list_images(directory_path):
+def make_list_images_with_filenames(directory_path):
     images_list = []
+    filenames = []
     for filename in os.listdir(directory_path):
         if filename.endswith(".tif"):
             image_path = os.path.join(directory_path, filename)
-            image = cv2.imread(image_path)
-            images_list.append(image)
-    return images_list
+            image = cv2.imread(image_path, cv2.IMREAD_COLOR)
+            image_rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+            images_list.append(image_rgb)
+            filenames.append(filename)
+    return images_list, filenames
 
 directory_path = "missdor/Base11"
 
-X = make_list_images(directory_path)
+X, filenames = make_list_images_with_filenames(directory_path)
 X = np.array(scale_all(X))
+
+"""for idx, filename in enumerate(filenames):
+    print(f"Image {idx}: {filename}")"""
 
 mean = [0.485, 0.456, 0.406]
 std = [0.229, 0.224, 0.225]
@@ -96,7 +102,6 @@ def predict(img: np.ndarray) -> torch.Tensor:
     img = nhwc_to_nchw(torch.Tensor(img))
     output = model(img)
     return output
-
 
 
 Xtr = transform(torch.Tensor(X))
