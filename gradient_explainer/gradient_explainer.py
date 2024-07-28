@@ -1,5 +1,7 @@
 # Run script with:
 #python3 -m gradient_explainer.gradient_explainer
+# Alternatively:
+#python3 -m gradient_explainer.gradient_explainer; python3 -m gradient_explainer.plots
 
 from config import Opt
 
@@ -32,7 +34,6 @@ def normalize(image):
     if image.max() > 1:
         image = image.astype(np.float32) / 255
     image = (image - mean) / std
-    x = torch.tensor(image.swapaxes(-1, 1).swapaxes(2, 3)).float()
     return torch.tensor(image.swapaxes(-1, 1).swapaxes(2, 3)).float()
 
 def scale(image):
