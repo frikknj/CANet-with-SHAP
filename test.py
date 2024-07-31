@@ -82,13 +82,22 @@ print('acc: {:.4f}, auc: {:.4f}, prc: {:.4f}, recall: {:.4f}, f1: {:.4f}'.format
 acu_curve(all_target, all_prob_list)
 
 with open("test_results.txt", "w") as file:
+    counter_1 = 0
+    counter_2 = 0
     correct_predictions = 0
     file.write("Image ID, Prediction, Probability, Target\n")
     for img_id, pred, prob, target in zip(all_ids, all_pre_list, all_prob_list, all_target):
         file.write(f"{img_id}, {pred}, {prob}, {target}\n")
         if pred == target:
             correct_predictions += 1
+        else:
+            if pred == [0] and target == [1]:
+                counter_1 += 1
+            elif pred == [1] and target == [0]:                
+                counter_2 += 1
     file.write(f"Correct predictions: {correct_predictions}/{len(all_ids)}")
+    file.write(f"counter_1: {counter_1}, counter_2: {counter_2}")
+    
 
 with open("test_filtered_results.txt", "w") as file:
     correct_predictions = 0

@@ -119,4 +119,4 @@ Image ID, Prediction, Probability, Target
 20051205_57942_0400_PP, [0], 2.9272806045810285e-07, [0]
 20060407_44866_0200_PP, [0], 0.3415110409259796, [0]
 20051020_63269_0100_PP, [0], 1.998739389819093e-05, [0]
-Correct predictions: 97/120
+Correct predictions: 97/120counter_1: 10, counter_2: 13
