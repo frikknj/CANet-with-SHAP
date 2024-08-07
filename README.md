@@ -19,4 +19,4 @@ Run the train and test file to train the model.
 
 ## Generate SHAP image plots
 
-In the gradient_explainer.py and partition_explainer.py files see comment of how to run.
+In the gradient_explainer.py and partition_explainer.py files see comments on how to run.
